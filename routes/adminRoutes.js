@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/users_model');
 const jwt = require('jsonwebtoken');
 
-// Middleware ตรวจ role admin
+
 function isAdmin(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
