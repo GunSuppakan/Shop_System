@@ -6,12 +6,18 @@ const jwt = require('jsonwebtoken');
 
 function isAdmin(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+  if (!authHeader) 
+    return res.status(401).json({
+      message: 'Unauthorized' 
+    });
 
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== 'admin') return res.status(403).json({ message: 'Forbidden' });
+    if (decoded.role !== 'admin') 
+      return res.status(403).json({
+        message: 'Forbidden' 
+      });
     req.user = decoded;
     next();
   } catch {
@@ -21,12 +27,20 @@ function isAdmin(req, res, next) {
 
 router.get('/users', isAdmin, async (req, res) => {
   const users = await User.find();
-  res.json(users);
+  res.status(201).json({
+    status: 201,
+    message: "Success",
+    data: users
+  })
 });
 
 router.put('/users/:id/approve', isAdmin, async (req, res) => {
   const user = await User.findByIdAndUpdate(req.params.id, { isApproved: true }, { new: true });
-  res.json(user);
+  res.status(201).json({
+    status: 201,
+    message: "Approve Success",
+    data: user
+  })
 });
 
 module.exports = router;
